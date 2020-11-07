@@ -39,8 +39,33 @@ function App() {
     return response.json();
   }
 
-  function setCheck(e) {
-    console.log(e);
+  async function del(e) {
+    const id = e.target.value;
+
+    if (id === '') return;
+
+    fetch(url + '/' + id, {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+
+    console.log(e.target.value);
+  }
+
+  async function clearAll() {
+    if (todos === '') return;
+    todos.map((e) => {
+      fetch(url + '/' + e.id, {
+        method: 'DELETE',
+        header: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+    });
   }
 
   return (
@@ -67,7 +92,9 @@ function App() {
                 className='three columns button-primary u-pull-right'
                 type='submit'
               ></input>
-              <button className='button u-pull-right'>Clear All</button>
+              <button className='button u-pull-right' onClick={clearAll}>
+                Clear All
+              </button>
             </div>
           </form>
         </div>
@@ -76,29 +103,32 @@ function App() {
       <table className='u-full-width todos'>
         <thead>
           <tr>
-            <th>Id</th>
             <th>Todo</th>
-            <th>Level</th>
+            <th>Check</th>
           </tr>
         </thead>
         <tbody>
-          {todos.map((data) => {
-            return (
-              <tr key={data.id} className={data.level}>
-                <td>{data.id}</td>
-                <td>{data.todo}</td>
-                <td>{data.level}</td>
-                <td>
-                  <input
-                    type='checkbox'
-                    defaultChecked={data.check}
-                    onChange={setCheck}
-                  />
-                </td>
-                <tr></tr>
-              </tr>
-            );
-          })}
+          {todos
+            .slice(0)
+            .reverse()
+            .map((data) => {
+              return (
+                <tr key={data.id} className={data.level}>
+                  <td>{data.todo}</td>
+                  <td>
+                    <input type='checkbox' defaultChecked={data.check} />
+
+                    <button
+                      className='button-primary u-pull-right'
+                      onClick={del}
+                      value={data.id}
+                    >
+                      <i className='fa fa-times'></i>
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
     </div>
