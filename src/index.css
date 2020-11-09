@@ -14,4 +14,10 @@ code {
 .todos tbody tr td {
   padding-left: 20px;
   font-weight: 600;
+  font-size: 18px;
+}
+
+.checked {
+  text-decoration: 2px line-through;
+  text-decoration-color: #444;
 }
