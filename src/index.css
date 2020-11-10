@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding: 20px;
 }
 
 code {
@@ -22,10 +23,27 @@ code {
   text-decoration-color: #444;
 }
 
-.check svg {
+.check i {
   user-select: none;
+  pointer-events: none;
+  opacity: 0.8;
 }
-
+.button-primary > i {
+  user-select: none;
+  pointer-events: none;
+}
 button {
   margin-right: 2px;
+}
+
+.important {
+  color: rgb(247, 117, 43);
+}
+
+.normal {
+  color: rgb(57, 126, 255);
+}
+
+.less-important {
+  color: rgb(84, 143, 84);
 }
