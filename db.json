@@ -2,9 +2,21 @@
   "todos": [
     {
       "id": 1,
-      "todo": "21221222",
+      "todo": "  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsum, labore in qui, soluta laboriosam necessitatibus perspiciatis assumenda voluptatum ea, beatae non itaque placeat quia pariatur mollitia eligendi commodi sunt! Necessitatibus.",
       "level": "normal",
       "check": false
+    },
+    {
+      "id": 2,
+      "todo": "  Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat delectus temporibus voluptas maxime porro? Minima assumenda reiciendis eligendi ex pariatur! Est aspernatur sunt dignissimos. Fugit cum maxime voluptatum consequatur sunt.",
+      "level": "normal",
+      "check": true
+    },
+    {
+      "id": 3,
+      "todo": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae, reprehenderit similique amet a itaque necessitatibus nostrum quibusdam neque, repellat omnis sequi non quidem. Doloribus similique recusandae consequatur quasi labore aliquid.",
+      "level": "normal",
+      "check": true
     }
   ]
 }

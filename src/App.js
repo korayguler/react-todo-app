@@ -1,27 +1,27 @@
+import Axios from 'axios';
 import React, { useState, useEffect } from 'react';
 
 function App() {
   const [todos, setTodos] = useState([]);
-  const [update, setUpdate] = useState(true);
   const url = 'http://localhost:3000/todos';
 
   useEffect(() => {
-    get(url).then((data) => setTodos(data));
-    setUpdate(false);
-  }, [update]);
+    get(url);
+  }, []);
+
   function add(e) {
     e.preventDefault();
-    const todo = e.target.todo;
+    let todo = e.target.todo;
     const level = e.target.level;
     if (todo.value === '' || level.value === '') return;
-
     post(url, {
       id: todos.length + 1,
       todo: todo.value,
       level: level.value,
       check: false,
     }).then((data) => console.log(data));
-    setUpdate(true);
+    todo.value = '';
+    get();
   }
 
   async function post(url = '', data = '') {
@@ -33,13 +33,13 @@ function App() {
       },
       body: JSON.stringify(data),
     });
-    setUpdate(true);
+    get();
     return response.json();
   }
 
-  async function get(url = '') {
-    const response = await fetch(url);
-    return response.json();
+  async function get(URL = url) {
+    const response = await Axios.get(url);
+    setTodos(response.data);
   }
 
   async function del(e) {
@@ -54,43 +54,26 @@ function App() {
         'Content-Type': 'application/json',
       },
     });
-    setUpdate(true);
-  }
-
-  async function clearAll() {
-    if (todos === '') return;
-    todos.forEach((e) => {
-      fetch(url + '/' + e.id, {
-        method: 'DELETE',
-        header: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      });
-    });
-    setUpdate(true);
+    get();
   }
 
   async function checkControl(e) {
-    const id = e.target.value;
-    if (id === '') return;
-    const curr = await !todos.find((d) => d.id === parseInt(id)).check;
-    console.log(curr);
-    const response = await fetch(url + '/' + id, {
-      method: 'PATCH',
-      header: {
-        'Content-Type': 'application/json',
-      },
+    const id = e.target.dataset.id;
+    const URL = url + '/' + id;
+    console.log(e);
+    if (id === '' && id === null) return;
 
-      body: JSON.stringify({
+    let curr = !todos.find((d) => (d.id === parseInt(id) ? d.check : null));
+    const response = await Axios.patch(
+      URL,
+      {
         check: curr,
-      }),
-    });
-
-    const result = response.json();
-
-    result.then((json) => console.log(json)).catch((err) => console.error(err));
-    setUpdate(true);
+      },
+      { headers: { 'Content-Type': 'application/json' } },
+    );
+    const result = response.data;
+    console.log(result);
+    get();
   }
   return (
     <div className='container'>
@@ -113,12 +96,9 @@ function App() {
                 <option value='less-important'>Az önemli</option>
               </select>
               <input
-                className='three columns button-primary u-pull-right'
+                className='button-primary u-pull-right'
                 type='submit'
               ></input>
-              <button className='button u-pull-right' onClick={clearAll}>
-                Clear All
-              </button>
             </div>
           </form>
         </div>
@@ -128,7 +108,12 @@ function App() {
         <thead>
           <tr>
             <th>Todo</th>
-            <th>Check</th>
+            <th>
+              <span className='u-pull-right'>Check</span>
+            </th>
+            <th>
+              <span className='u-pull-right'>Delete</span>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -139,20 +124,29 @@ function App() {
               return (
                 <tr key={data.id} className={data.level}>
                   <td className={data.check ? 'checked' : null}>{data.todo}</td>
-                  <td>
-                    <input
-                      type='checkbox'
-                      defaultChecked={data.check}
-                      value={data.id}
-                      onChange={checkControl}
-                    />
 
+                  <td>
+                    <button
+                      className='check u-pull-right'
+                      data-id={data.id}
+                      onClick={checkControl}
+                    >
+                      <i
+                        className={
+                          data.check
+                            ? 'fas fa-check-circle fa-lg'
+                            : 'far fa-check-circle fa-lg'
+                        }
+                      ></i>
+                    </button>
+                  </td>
+                  <td>
                     <button
                       className='button-primary u-pull-right'
                       onClick={del}
                       value={data.id}
                     >
-                      <i className='fa fa-times'></i>
+                      <i className='fa fa-times fa-lg'></i>
                     </button>
                   </td>
                 </tr>

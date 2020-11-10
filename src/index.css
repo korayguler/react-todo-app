@@ -21,3 +21,11 @@ code {
   text-decoration: 2px line-through;
   text-decoration-color: #444;
 }
+
+.check svg {
+  user-select: none;
+}
+
+button {
+  margin-right: 2px;
+}
