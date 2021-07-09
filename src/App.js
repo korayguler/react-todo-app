@@ -46,15 +46,17 @@ function App() {
     const id = e.target.value;
 
     if (id === '') return;
-
-    fetch(url + '/' + id, {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    });
-    get();
+    
+    if(window.confirm("Silmek üzeresiniz... Silmek için emin misiniz ?")){
+      fetch(url + '/' + id, {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+      get();
+    }
   }
 
   async function checkControl(e) {
